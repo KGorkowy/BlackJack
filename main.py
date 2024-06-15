@@ -21,6 +21,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.collidepoint(pygame.mouse.get_pos()):
                     game.reset_game()  # Reset the game state
+                    game.game_over = False  # Reset the game over flag
                     game.game_loop()
                 if exit_button.collidepoint(pygame.mouse.get_pos()):
                     pygame.quit()

@@ -20,8 +20,13 @@ class Resources:
         self.pattern = pygame.image.load('pattern.png').convert_alpha()
         self.pattern = pygame.transform.scale(self.pattern, (WIDTH, HEIGHT))
         self.card_images = self.load_card_images()
-        self.back_card_image = pygame.transform.scale(pygame.image.load('cards/back.png').convert_alpha(),
-                                                      (150, 210))
+        self.back_card_image = pygame.transform.scale(pygame.image.load('cards/back.png').convert_alpha(), (150, 210))
+        self.card_shuffle_sound = pygame.mixer.Sound('sounds/card_shuffle.wav')
+        self.card_take = pygame.mixer.Sound('sounds/card_take.wav')
+        self.card_place = pygame.mixer.Sound('sounds/card_place.wav')
+        self.chip_sound = pygame.mixer.Sound('sounds/chip.wav')
+        self.fail_sound = pygame.mixer.Sound('sounds/fail.mp3')
+        self.clap_sound = pygame.mixer.Sound('sounds/clap.mp3')
 
     def load_card_images(self, width=150, height=210):
         card_images = {}

@@ -52,7 +52,8 @@ class BlackjackGame(Game):
         self.level = 1
         self.level_requirements = {1: 120, 2: 150, 3: 200}
         self.level_up = False
-        self.new_level = False
+        self.game_over = False
+        self.resources.card_shuffle_sound.play()
 
     def deal_initial_cards(self):
         self.player_hand.clear()
@@ -67,6 +68,7 @@ class BlackjackGame(Game):
         end_pos = (70 + 40 * len(hand.cards), target_y)
         card_image = self.resources.back_card_image if (hand == self.dealer_hand and not reveal) else \
             self.resources.card_images[card]
+        self.resources.card_take.play()
 
         # Animation of moving the card
         for step in range(35):
@@ -90,6 +92,7 @@ class BlackjackGame(Game):
                                 self.dealer_hand.value(), self.active, [], False, self.level,
                                 self.level_requirements[self.level])
         self.renderer.draw_cards(self.player_hand, self.dealer_hand, self.reveal_dealer_hand)
+        self.resources.card_place.play()
         pygame.display.update()
 
     def dealer_turn(self):
@@ -175,11 +178,14 @@ class BlackjackGame(Game):
             if round_result == "lose":
                 self.renderer.draw_text("You Lose!", self.resources.font, white, WIDTH / 2, HEIGHT / 2)
                 self.player_balance -= 10
+                self.resources.chip_sound.play()
             elif round_result == "win":
                 self.renderer.draw_text("You Win!", self.resources.font, white, WIDTH / 2, HEIGHT / 2)
                 self.player_balance += 10
+                self.resources.chip_sound.play()
             elif round_result == "draw":
                 self.renderer.draw_text("It's a Tie!", self.resources.font, white, WIDTH / 2, HEIGHT / 2)
+
 
             self.round_result_checked = True
             pygame.display.update()
@@ -194,12 +200,17 @@ class BlackjackGame(Game):
 
                     self.renderer.draw_win_screen(self.player_balance)
                 self.player_balance = 100.0  # Reset the player's balance to 100 dollars after every level
-            elif self.player_balance <= 0:
+            if self.player_balance <= 0:
+                self.resources.fail_sound.play()
                 self.renderer.draw_loss_screen()
+                pygame.display.update()
+                pygame.time.wait(5000)  # Wait for 2 seconds before ending the game
+                self.game_over = True
             else:
                 self.reveal_dealer_hand = False
 
             if self.player_balance >= self.level_requirements[self.level]:
+                self.resources.clap_sound.play()
                 self.win = True
                 self.renderer.draw_win_screen(self.player_balance)
                 self.level_up = True  # Set the level up flag to True
@@ -258,6 +269,9 @@ class BlackjackGame(Game):
                                     self.active, [], False, self.level,
                                     self.level_requirements[self.level])
             self.renderer.draw_cards(self.player_hand, self.dealer_hand, self.reveal_dealer_hand)
+
+            if self.game_over:
+                break
 
             pygame.display.update()
             self.timer.tick(FPS)
