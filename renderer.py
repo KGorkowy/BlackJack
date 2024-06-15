@@ -47,7 +47,6 @@ class Renderer:
         self.draw_text("Blackjack", self.resources.title_font, white, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Made by Kamil Górkowy", self.resources.author_font, white, WIDTH / 2, HEIGHT / 4 + 75)
 
-        mouse_x, mouse_y = pygame.mouse.get_pos()
         start_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 - 50, 300, 100)
         exit_button = pygame.Rect(WIDTH // 2 - 150, HEIGHT // 2 + 100, 300, 100)
 

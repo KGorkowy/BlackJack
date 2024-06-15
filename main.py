@@ -1,6 +1,6 @@
 import sys
 import pygame
-import blackjackGame
+from game import BlackjackGame
 
 # FPS quantity
 FPS = 60
@@ -11,7 +11,7 @@ pygame.init()
 
 # Function to start the game
 def main():
-    game = blackjackGame.BlackjackGame()
+    game = BlackjackGame()
     while True:
         start_button, exit_button = game.renderer.draw_main_menu()
         for event in pygame.event.get():

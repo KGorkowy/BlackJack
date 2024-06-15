@@ -21,8 +21,22 @@ white = (255, 255, 255)
 
 
 # Main game class
-class BlackjackGame:
+class Game:
     def __init__(self):
+        self.active = False
+        self.player_balance = 100.0
+        self.win = False
+
+    def reset_game(self):
+        self.active = False
+        self.player_balance = 100.0
+        self.win = False
+
+
+# Class representing a game of Blackjack
+class BlackjackGame(Game):
+    def __init__(self):
+        super().__init__()
         pygame.display.set_caption('Blackjack')
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.timer = pygame.time.Clock()
@@ -31,11 +45,8 @@ class BlackjackGame:
         self.player_hand = hand.Hand()
         self.dealer_hand = hand.Hand()
         self.deck = deck.Deck()
-        self.active = False
         self.initial_deal = False
         self.reveal_dealer_hand = False
-        self.player_balance = 100.0
-        self.win = False
         self.game_started = False
         self.round_result_checked = False
         self.level = 1
@@ -55,7 +66,7 @@ class BlackjackGame:
         target_y = 450 if hand == self.player_hand else 150
         end_pos = (70 + 40 * len(hand.cards), target_y)
         card_image = self.resources.back_card_image if (hand == self.dealer_hand and not reveal) else \
-        self.resources.card_images[card]
+            self.resources.card_images[card]
 
         # Animation of moving the card
         for step in range(35):
@@ -148,7 +159,7 @@ class BlackjackGame:
 
             if player_value > 21:
                 round_result = "lose"
-            elif (player_value > 21 and dealer_value > 21):
+            elif player_value > 21 and dealer_value > 21:
                 round_result = "draw"
             elif player_value == dealer_value < 21:
                 round_result = "draw"
